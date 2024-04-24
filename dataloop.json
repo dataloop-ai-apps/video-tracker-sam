@@ -5,8 +5,8 @@
   "version": "1.0.1",
   "attributes": {
     "Provider": "Other",
-    "Category": "Element",
-    "Element Type": ["Model", "Function"],
+    "Category": "Application",
+    "Application Type": ["Model", "Function"],
     "License": "Apache 2.0"
   },
   "scope": "public",
