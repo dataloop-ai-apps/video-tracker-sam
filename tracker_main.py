@@ -6,13 +6,35 @@ import cv2
 import torch
 import dtlpy as dl
 import sys
+from threading import Thread, Timer
 
 sys.path.append('./FastSAM')
 from sam_tracker.TrackedBox import TrackedBox
 from SAM import FastSAM
 from sam_tracker.utils import Bbox
+import subprocess as sp
 
 logger = logging.getLogger(__name__)
+
+
+def get_gpu_memory():
+    output_to_list = lambda x: x.decode('ascii').split('\n')[:-1]
+    COMMAND = "nvidia-smi --query-gpu=memory.used --format=csv"
+    try:
+        memory_use_info = output_to_list(sp.check_output(COMMAND.split(), stderr=sp.STDOUT))[1:]
+    except sp.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    memory_use_values = [int(x.split()[0]) for i, x in enumerate(memory_use_info)]
+    # print(memory_use_values)
+    return memory_use_values
+
+
+def print_gpu_memory_every_5secs():
+    """
+        This function calls itself every 5 secs and print the gpu_memory.
+    """
+    Timer(1.0, print_gpu_memory_every_5secs).start()
+    print(get_gpu_memory())
 
 
 class ServiceRunner(dtlpy.BaseServiceRunner):
@@ -23,6 +45,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
 
     def __init__(self):
         # ini params
+        print_gpu_memory_every_5secs()
         self.MAX_AGE = 20
         self.THRESH = 0.4
         self.MIN_AREA = 20
