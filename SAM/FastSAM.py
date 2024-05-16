@@ -19,10 +19,10 @@ class FastSAM(SAM):
         self.predictor = None
 
     def set_image(self, image):
-
         if self.predictor is None:
+            print('setting up a model')
             overrides = self.model.overrides.copy()
-            overrides['conf'] = 0.25
+            overrides['conf'] = self.conf
             overrides.update(dict(device=self.device,
                                   retina_masks=True,
                                   imgsz=640,

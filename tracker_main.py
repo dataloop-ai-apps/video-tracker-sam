@@ -31,13 +31,6 @@ def get_gpu_memory():
     return memory_use_values
 
 
-def print_gpu_memory_every_5secs():
-    """
-        This function calls itself every 5 secs and print the gpu_memory.
-    """
-    print('whaaaa', get_gpu_memory())
-
-
 class ServiceRunner(dtlpy.BaseServiceRunner):
     """
     Service runner class
@@ -46,7 +39,6 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
 
     def __init__(self):
         # ini params
-        print_gpu_memory_every_5secs()
         print('whaaaa', get_gpu_memory())
         self.MAX_AGE = 20
         self.THRESH = 0.4
@@ -103,6 +95,8 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
         :return:
         """
         try:
+            print('whaaaa', get_gpu_memory())
+
             if not isinstance(bbs, dict):
                 raise ValueError('input "bbs" must be a dictionary of {id:bbox}')
             print('[Tracker] Started')
@@ -125,6 +119,8 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
 
             print('[Tracker] going to process {} frames'.format(frame_duration))
             for i_frame in range(1, frame_duration):
+                print('whaaaa', get_gpu_memory())
+
                 print('[Tracker] processing frame #{}'.format(start_frame + i_frame))
                 tic = time.time()
                 ret, frame = cap.read()
@@ -139,13 +135,20 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
 
                 tic = time.time()
                 for bbox_id, bb in bbs.items():
+                    print('whaaaa', get_gpu_memory())
+
                     # track
                     bbox = states_dict[bbox_id].track(sam=self.sam,
                                                       thresh=self.THRESH,
                                                       min_area=self.MIN_AREA)
-                    output_dict[bbox_id][start_frame + i_frame] = None if bbox is None else \
-                        dl.Box(top=bbox.y, left=bbox.x, bottom=bbox.y2, right=bbox.x2,
-                               label='dummy').to_coordinates(color=None)
+                    if bbox is None:
+                        output_dict[bbox_id][start_frame + i_frame] = None
+                    else:
+                        output_dict[bbox_id][start_frame + i_frame] = dl.Box(top=bbox.y,
+                                                                             left=bbox.x,
+                                                                             bottom=bbox.y2,
+                                                                             right=bbox.x2,
+                                                                             label='dummy').to_coordinates(color=None)
 
                 runtime_track.append(time.time() - tic)
 
