@@ -47,10 +47,9 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
             logger.info('[Tracker] [WARNING] cuda is NOT available.')
             self.device = 'cpu'
         self.sam = FastSAM(device=self.device, small=False)
-        logger.info(('[Tracker] [INFO] Model loaded.')
+        logger.info('[Tracker] [INFO] Model loaded.')
 
-                    @ staticmethod
-
+    @staticmethod
     def _get_modality(mod: dict):
         if 'operation' in mod:
             if mod['operation'] == 'replace':
