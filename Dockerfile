@@ -4,7 +4,7 @@ USER 1000
 COPY requirements.txt /tmp/
 WORKDIR /tmp
 RUN pip install --user -r /tmp/requirements.txt
-RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+RUN pip install --user torch torchvision --index-url https://download.pytorch.org/whl/cu118
 
 
 

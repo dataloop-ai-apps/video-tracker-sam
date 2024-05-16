@@ -6,7 +6,9 @@ import cv2
 import torch
 import dtlpy as dl
 import sys
-from threading import Thread, Timer
+import os
+
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:4000"
 
 sys.path.append('./FastSAM')
 from sam_tracker.TrackedBox import TrackedBox
@@ -34,7 +36,6 @@ def print_gpu_memory_every_5secs():
         This function calls itself every 5 secs and print the gpu_memory.
     """
     print('whaaaa', get_gpu_memory())
-    Timer(1.0, print_gpu_memory_every_5secs).start()
 
 
 class ServiceRunner(dtlpy.BaseServiceRunner):
