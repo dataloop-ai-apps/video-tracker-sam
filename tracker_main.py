@@ -49,7 +49,8 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
         self.sam = FastSAM(device=self.device, small=False)
         logger.info(('[Tracker] [INFO] Model loaded.')
 
-    @staticmethod
+                    @ staticmethod
+
     def _get_modality(mod: dict):
         if 'operation' in mod:
             if mod['operation'] == 'replace':
@@ -133,7 +134,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                 states_dict_flag = all(bb.gone for bb in states_dict.values())
                 if not ret or states_dict_flag:
                     logger.info(f"[Tracker] stopped at frame {i_frame}: "
-                          f"opencv frame read :{ret}, all bbs gone: {states_dict_flag}")
+                                f"opencv frame read :{ret}, all bbs gone: {states_dict_flag}")
                     break
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -153,10 +154,10 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                         output_dict[bbox_id][start_frame + i_frame] = None
                     else:
                         logger.info('Found tracking BB')
-                        output_dict[bbox_id][start_frame + i_frame] = dl.Box(top=bbox.y * y_factor,
-                                                                             left=bbox.x * x_factor,
-                                                                             bottom=bbox.y2 * y_factor,
-                                                                             right=bbox.x2 * x_factor,
+                        output_dict[bbox_id][start_frame + i_frame] = dl.Box(top=int(np.round(bbox.y * y_factor)),
+                                                                             left=int(np.round(bbox.x * x_factor)),
+                                                                             bottom=int(np.round(bbox.y2 * y_factor)),
+                                                                             right=int(np.round(bbox.x2 * x_factor)),
                                                                              label='dummy').to_coordinates(color=None)
 
                 runtime_track.append(time.time() - tic)
@@ -165,12 +166,12 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
             fps = frame_duration / (runtime_total + 1e-6)
             logger.info('[Tracker] Finished.')
             logger.info('[Tracker] Runtime information: \n'
-                  f'Total runtime: {runtime_total:.2f}[s]\n'
-                  f'FPS: {fps:.2f}fps\n'
-                  f'Get url capture object: {runtime_get_cap:.2f}[s]\n'
-                  f'Total track time: {np.sum(runtime_load_frame) + np.sum(runtime_track):.2f}[s]\n'
-                  f'Mean load per frame: {np.mean(runtime_load_frame):.2f}\n'
-                  f'Mean track per frame: {np.mean(runtime_track):.2f}')
+                        f'Total runtime: {runtime_total:.2f}[s]\n'
+                        f'FPS: {fps:.2f}fps\n'
+                        f'Get url capture object: {runtime_get_cap:.2f}[s]\n'
+                        f'Total track time: {np.sum(runtime_load_frame) + np.sum(runtime_track):.2f}[s]\n'
+                        f'Mean load per frame: {np.mean(runtime_load_frame):.2f}\n'
+                        f'Mean track per frame: {np.mean(runtime_track):.2f}')
             logger.info('[Tracker] DEVICE: {}'.format(self.device))
         except Exception:
             logger.exception('Failed during track:')
