@@ -132,7 +132,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 x_factor = frame.shape[1] / 1024
                 y_factor = frame.shape[0] / 1024
-                self.sam.set_image(cv2.resize(frame, (1024, 1024)))
+                self.sam.set_image(image=cv2.resize(frame, (1024, 1024)))
                 runtime_load_frame.append(time.time() - tic)
 
                 tic = time.time()
