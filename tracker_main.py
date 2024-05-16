@@ -48,7 +48,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
         else:
             print('[Tracker] [WARNING] cuda is NOT available.')
             self.device = 'cpu'
-        self.sam = FastSAM(device=self.device, small=True)
+        self.sam = FastSAM(device=self.device, small=False)
         print('[Tracker] [INFO] Model loaded.')
 
     @staticmethod
@@ -102,9 +102,14 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
             print('[Tracker] Started')
 
             print('[Tracker] video url: {}'.format(item_stream_url))
+            d_size = 1024
             tic_get_cap = time.time()
             cap = self._get_item_stream_capture(item_stream_url)
             cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
+            frame_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            frame_width = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            x_factor = frame_width / d_size
+            y_factor = frame_height / d_size
             runtime_get_cap = time.time() - tic_get_cap
             print('[Tracker] starting from {} to {}'.format(start_frame, start_frame + frame_duration))
 
@@ -114,7 +119,10 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
 
             tic_total = time.time()
             output_dict = {bbox_id: dict() for bbox_id, _ in bbs.items()}
-            states_dict = {bbox_id: TrackedBox(Bbox.from_xyxy(bb[0]['x'], bb[0]['y'], bb[1]['x'], bb[1]['y']),
+            states_dict = {bbox_id: TrackedBox(Bbox.from_xyxy(bb[0]['x'] / x_factor,
+                                                              bb[0]['y'] / y_factor,
+                                                              bb[1]['x'] / x_factor,
+                                                              bb[1]['y'] / y_factor),
                                                max_age=self.MAX_AGE) for bbox_id, bb in bbs.items()}
 
             print('[Tracker] going to process {} frames'.format(frame_duration))
@@ -130,9 +138,8 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                           f"opencv frame read :{ret}, all bbs gone: {states_dict_flag}")
                     break
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                x_factor = frame.shape[1] / 1024
-                y_factor = frame.shape[0] / 1024
-                self.sam.set_image(image=cv2.resize(frame, (1024, 1024)))
+
+                self.sam.set_image(image=cv2.resize(frame, (d_size, d_size)))
                 runtime_load_frame.append(time.time() - tic)
 
                 tic = time.time()
@@ -180,4 +187,4 @@ if __name__ == "__main__":
         "frame_duration": 72
     }
 
-    runner.run(**dl.executions.get('6645f2d8f2b9def1f0d2c717').input)
+    runner.run(**dl.executions.get('6646250c737a021a47459ba8').input)
