@@ -33,8 +33,8 @@ def print_gpu_memory_every_5secs():
     """
         This function calls itself every 5 secs and print the gpu_memory.
     """
+    print('whaaaa', get_gpu_memory())
     Timer(1.0, print_gpu_memory_every_5secs).start()
-    print(get_gpu_memory())
 
 
 class ServiceRunner(dtlpy.BaseServiceRunner):
@@ -46,6 +46,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
     def __init__(self):
         # ini params
         print_gpu_memory_every_5secs()
+        print('whaaaa', get_gpu_memory())
         self.MAX_AGE = 20
         self.THRESH = 0.4
         self.MIN_AREA = 20
