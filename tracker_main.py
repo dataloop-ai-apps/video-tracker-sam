@@ -149,7 +149,5 @@ if __name__ == "__main__":
         "start_frame": 0,
         "frame_duration": 72
     }
-    runner.run(item_stream_url=inputs['item_stream_url'],
-               bbs=inputs['bbs'],
-               start_frame=inputs['start_frame'],
-               frame_duration=inputs['frame_duration'])
+
+    runner.run(**dl.executions.get('6645f2d8f2b9def1f0d2c717').input)
