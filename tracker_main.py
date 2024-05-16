@@ -10,7 +10,7 @@ from threading import Thread, Timer
 
 sys.path.append('./FastSAM')
 from sam_tracker.TrackedBox import TrackedBox
-from SAM import FastSAM
+from SAM import FastSAM, MobileSAM
 from sam_tracker.utils import Bbox
 import subprocess as sp
 
@@ -55,7 +55,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
         else:
             print('[Tracker] [WARNING] cuda is NOT available.')
             self.device = 'cpu'
-        self.sam = FastSAM(device=self.device, small=False)
+        self.sam = FastSAM(device=self.device, small=True)
         print('[Tracker] [INFO] Model loaded.')
 
     @staticmethod

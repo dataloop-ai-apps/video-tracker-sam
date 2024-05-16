@@ -1,4 +1,4 @@
-FROM dataloopai/dtlpy-agent:gpu.cuda.11.8.py3.8.pytorch2
+FROM dataloopai/dtlpy-agent:gpu.cuda.11.8.py3.10.opencv
 
 USER 1000
 COPY requirements.txt /tmp/
@@ -8,5 +8,5 @@ RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/c
 
 
 
-# docker build --no-cache -t gcr.io/viewo-g/piper/agent/runner/gpu/video-tracker-sam:0.1.10 -f Dockerfile .
-# docker push gcr.io/viewo-g/piper/agent/runner/gpu/video-tracker-sam:0.1.10
+# docker build --no-cache -t gcr.io/viewo-g/piper/agent/runner/gpu/video-tracker-sam:0.1.11 -f Dockerfile .
+# docker push gcr.io/viewo-g/piper/agent/runner/gpu/video-tracker-sam:0.1.11
