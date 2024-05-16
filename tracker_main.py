@@ -130,7 +130,9 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                           f"opencv frame read :{ret}, all bbs gone: {states_dict_flag}")
                     break
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                self.sam.set_image(cv2.resize(frame, (640, 640)))
+                x_factor = frame.shape[1] / 1024
+                y_factor = frame.shape[0] / 1024
+                self.sam.set_image(cv2.resize(frame, (1024, 1024)))
                 runtime_load_frame.append(time.time() - tic)
 
                 tic = time.time()
@@ -144,10 +146,10 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                     if bbox is None:
                         output_dict[bbox_id][start_frame + i_frame] = None
                     else:
-                        output_dict[bbox_id][start_frame + i_frame] = dl.Box(top=bbox.y,
-                                                                             left=bbox.x,
-                                                                             bottom=bbox.y2,
-                                                                             right=bbox.x2,
+                        output_dict[bbox_id][start_frame + i_frame] = dl.Box(top=bbox.y * y_factor,
+                                                                             left=bbox.x * x_factor,
+                                                                             bottom=bbox.y2 * y_factor,
+                                                                             right=bbox.x2 * x_factor,
                                                                              label='dummy').to_coordinates(color=None)
 
                 runtime_track.append(time.time() - tic)
