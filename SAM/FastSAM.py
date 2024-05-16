@@ -25,7 +25,7 @@ class FastSAM(SAM):
             overrides['conf'] = 0.25
             overrides.update(dict(device=self.device,
                                   retina_masks=True,
-                                  imgsz=480,
+                                  imgsz=1024,
                                   conf=self.conf,
                                   iou=0.80, ))  # prefer kwargs
             overrides['mode'] = 'predict'
