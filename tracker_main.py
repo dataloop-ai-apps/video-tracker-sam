@@ -115,7 +115,9 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                 tic = time.time()
                 for bbox_id, bb in bbs.items():
                     # track
-                    bbox = states_dict[bbox_id].track(sam=self.sam, thresh=self.THRESH, min_area=self.MIN_AREA)
+                    bbox = states_dict[bbox_id].track(sam=self.sam,
+                                                      thresh=self.THRESH,
+                                                      min_area=self.MIN_AREA)
                     output_dict[bbox_id][start_frame + i_frame] = None if bbox is None else \
                         dl.Box(top=bbox.y, left=bbox.x, bottom=bbox.y2, right=bbox.x2,
                                label='dummy').to_coordinates(color=None)

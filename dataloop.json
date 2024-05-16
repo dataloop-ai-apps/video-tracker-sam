@@ -72,7 +72,7 @@
         "runtime": {
           "podType": "gpu-t4-m",
           "concurrency": 1,
-          "runnerImage": "dataloopai/dtlpy-agent:gpu.cuda.11.8.py3.8.pytorch2",
+          "runnerImage": "gcr.io/viewo-g/piper/agent/runner/gpu/video-tracker-sam:0.1.10",
           "autoscaler": {
             "minReplicas": 0,
             "maxReplicas": 2,
