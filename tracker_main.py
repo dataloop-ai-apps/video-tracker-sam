@@ -130,7 +130,7 @@ class ServiceRunner(dtlpy.BaseServiceRunner):
                           f"opencv frame read :{ret}, all bbs gone: {states_dict_flag}")
                     break
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                self.sam.set_image(frame)
+                self.sam.set_image(cv2.resize(frame, (640, 640)))
                 runtime_load_frame.append(time.time() - tic)
 
                 tic = time.time()
