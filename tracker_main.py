@@ -6,11 +6,10 @@ import cv2
 import torch
 import dtlpy as dl
 import sys
-import os
 
 sys.path.append('./FastSAM')
 from sam_tracker.TrackedBox import TrackedBox
-from SAM import FastSAM, MobileSAM
+from SAM import FastSAM
 from sam_tracker.utils import Bbox
 import subprocess as sp
 
