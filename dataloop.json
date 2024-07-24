@@ -72,7 +72,7 @@
         "runtime": {
           "podType": "gpu-t4-m",
           "concurrency": 1,
-          "runnerImage": "gcr.io/viewo-g/piper/agent/runner/gpu/video-tracker-sam:0.1.11",
+          "runnerImage": "gcr.io/viewo-g/piper/agent/runner/apps/video-tracker-sam:1.0.21",
           "autoscaler": {
             "minReplicas": 0,
             "maxReplicas": 2,
