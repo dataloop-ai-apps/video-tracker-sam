@@ -18,6 +18,7 @@
   "components": {
     "toolbars": [
       {
+        "name":"sam-tracker",
         "displayName": "SAM Tracker",
         "invoke": {
           "type": "function",
